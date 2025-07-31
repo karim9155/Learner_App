@@ -7,4 +7,6 @@ import lombok.Data;
 @AllArgsConstructor
 public class LoginResponse {
     private String jwt;
+    private UserDTO user; // <-- Add this line
+
 }

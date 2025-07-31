@@ -1,6 +1,27 @@
 // Mock API responses for demo purposes
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
 
+export const API_URL = "http://localhost:8080"
+
+export const authApi = {
+  login: async (email: string, password: string) => {
+    const response = await fetch(`${API_URL}/auth/login`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email, password }),
+    })
+
+    if (!response.ok) {
+      const errorData = await response.json()
+      throw new Error(errorData.message || "Failed to login")
+    }
+
+    return response.json()
+  },
+}
+
 // Mock data
 const mockMetrics = {
   totalUsers: 1247,
@@ -229,16 +250,16 @@ export const usersApi = {
     if (params?.search) {
       const search = params.search.toLowerCase()
       filteredUsers = filteredUsers.filter(
-        (user) =>
-          user.firstName.toLowerCase().includes(search) ||
-          user.lastName.toLowerCase().includes(search) ||
-          user.email.toLowerCase().includes(search),
+          (user) =>
+              user.firstName.toLowerCase().includes(search) ||
+              user.lastName.toLowerCase().includes(search) ||
+              user.email.toLowerCase().includes(search),
       )
     }
 
     if (params?.role) {
       filteredUsers = filteredUsers.filter((user) =>
-        user.memberships.some((membership) => membership.role === params.role),
+          user.memberships.some((membership) => membership.role === params.role),
       )
     }
 
@@ -284,7 +305,7 @@ export const coursesApi = {
     if (params?.search) {
       const search = params.search.toLowerCase()
       filteredCourses = filteredCourses.filter(
-        (course) => course.title.toLowerCase().includes(search) || course.description.toLowerCase().includes(search),
+          (course) => course.title.toLowerCase().includes(search) || course.description.toLowerCase().includes(search),
       )
     }
 
@@ -331,10 +352,10 @@ export const enrollmentsApi = {
     if (params?.search) {
       const search = params.search.toLowerCase()
       filteredEnrollments = filteredEnrollments.filter(
-        (enrollment) =>
-          enrollment.user.firstName.toLowerCase().includes(search) ||
-          enrollment.user.lastName.toLowerCase().includes(search) ||
-          enrollment.course.title.toLowerCase().includes(search),
+          (enrollment) =>
+              enrollment.user.firstName.toLowerCase().includes(search) ||
+              enrollment.user.lastName.toLowerCase().includes(search) ||
+              enrollment.course.title.toLowerCase().includes(search),
       )
     }
 
@@ -385,6 +406,6 @@ export const progressApi = {
         video: { id: "3", title: "Event Handling", duration: 1500, order: 3 },
       },
     ]
-    return { data: { success: true, data: mockProgress } }
+    return { data: { success: true, data: mockProgress } }
   },
 }

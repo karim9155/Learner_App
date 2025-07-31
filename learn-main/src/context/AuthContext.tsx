@@ -3,6 +3,7 @@
 import type React from "react"
 import { createContext, useContext, useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
+import { authApi } from "@/lib/api"
 
 interface User {
   id: string
@@ -21,15 +22,6 @@ interface AuthContextType {
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
-
-// Mock user data
-const MOCK_USER: User = {
-  id: "1",
-  email: "admin@example.com",
-  firstName: "John",
-  lastName: "Doe",
-  avatar: undefined,
-}
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null)
@@ -52,23 +44,28 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, [])
 
   const login = async (email: string, password: string) => {
-    // Simulate API call delay
-    await new Promise((resolve) => setTimeout(resolve, 1000))
+    try {
+      const responseData = await authApi.login(email, password);
 
-    // Mock authentication - accept any credentials
-    if (email && password) {
-      const userData = {
-        ...MOCK_USER,
-        email: email, // Use the provided email
+      // Check for "jwt" (from your backend) NOT "token"
+      if (responseData.jwt && responseData.user) {
+        const userData = responseData.user;
+        setUser(userData);
+        localStorage.setItem("auth-user", JSON.stringify(userData));
+
+        // Save the "jwt" (from your backend) NOT "token"
+        localStorage.setItem("auth-token", responseData.jwt);
+
+        router.push("/dashboard");
+      } else {
+        // This is what's likely causing the "Login failed" error
+        throw new Error("Login success, but response format is incorrect.");
       }
-
-      setUser(userData)
-      localStorage.setItem("auth-user", JSON.stringify(userData))
-      router.push("/dashboard")
-    } else {
-      throw new Error("Please enter both email and password")
+    } catch (error: any) {
+      console.error("Detailed login error:", error);
+      throw new Error(error.message);
     }
-  }
+  };
 
   const logout = async () => {
     setUser(null)
@@ -77,7 +74,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <AuthContext.Provider value={{ user, loading, login, logout, isAuthenticated }}>{children}</AuthContext.Provider>
+      <AuthContext.Provider value={{ user, loading, login, logout, isAuthenticated }}>{children}</AuthContext.Provider>
   )
 }
 
@@ -86,5 +83,5 @@ export function useAuth() {
   if (context === undefined) {
     throw new Error("useAuth must be used within an AuthProvider")
   }
-  return context
+  return context
 }
