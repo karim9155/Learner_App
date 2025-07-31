@@ -3,7 +3,7 @@
 import type React from "react"
 import { useState } from "react"
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
-import { usersApi } from "@/lib/api"
+import { usersApi } from "@/lib/api/users"
 import { Button } from "@/components/ui/Button"
 import { Input } from "@/components/ui/Input"
 import { Select } from "@/components/ui/Select"

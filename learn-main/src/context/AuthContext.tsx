@@ -3,7 +3,7 @@
 import type React from "react"
 import { createContext, useContext, useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
-import { authApi } from "@/lib/api"
+import { authApi } from "@/lib/api/auth"
 
 interface User {
   id: string

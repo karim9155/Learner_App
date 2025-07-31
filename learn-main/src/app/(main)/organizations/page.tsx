@@ -4,7 +4,7 @@ import type React from "react"
 
 import { useState } from "react"
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
-import { organizationsApi } from "@/lib/api"
+import { organizationsApi } from "@/lib/api/organizations"
 import { Button } from "@/components/ui/Button"
 import { Input } from "@/components/ui/Input"
 import { Card, CardContent, CardHeader } from "@/components/ui/Card"
@@ -16,7 +16,7 @@ import { Plus, Search, Edit, Trash2 } from "lucide-react"
 interface Organization {
   id: string
   name: string
-  description: string
+  domain: string
   createdAt: string
   updatedAt: string
 }
@@ -26,7 +26,7 @@ export default function OrganizationsPage() {
   const [page, setPage] = useState(1)
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false)
   const [editingOrg, setEditingOrg] = useState<Organization | null>(null)
-  const [formData, setFormData] = useState({ name: "", description: "" })
+  const [formData, setFormData] = useState({ name: "", domain: "" })
 
   const queryClient = useQueryClient()
 
@@ -40,7 +40,7 @@ export default function OrganizationsPage() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["organizations"] })
       setIsCreateModalOpen(false)
-      setFormData({ name: "", description: "" })
+      setFormData({ name: "", domain: "" })
     },
   })
 
@@ -49,7 +49,7 @@ export default function OrganizationsPage() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["organizations"] })
       setEditingOrg(null)
-      setFormData({ name: "", description: "" })
+      setFormData({ name: "", domain: "" })
     },
   })
 
@@ -71,7 +71,7 @@ export default function OrganizationsPage() {
 
   const handleEdit = (org: Organization) => {
     setEditingOrg(org)
-    setFormData({ name: org.name, description: org.description })
+    setFormData({ name: org.name, domain: org.domain })
   }
 
   const handleDelete = (id: string) => {
@@ -122,7 +122,7 @@ export default function OrganizationsPage() {
               <TableHeader>
                 <TableRow>
                   <TableHead>Name</TableHead>
-                  <TableHead>Description</TableHead>
+                  <TableHead>domain</TableHead>
                   <TableHead>Created</TableHead>
                   <TableHead>Actions</TableHead>
                 </TableRow>
@@ -132,7 +132,7 @@ export default function OrganizationsPage() {
                   <TableRow key={org.id}>
                     <TableCell className="font-medium">{org.name}</TableCell>
                     <TableCell className="text-gray-600 dark:text-gray-400">
-                      {org.description || "No description"}
+                      {org.domain || "No domain"}
                     </TableCell>
                     <TableCell className="text-gray-600 dark:text-gray-400">{formatDate(org.createdAt)}</TableCell>
                     <TableCell>
@@ -177,7 +177,7 @@ export default function OrganizationsPage() {
         onClose={() => {
           setIsCreateModalOpen(false)
           setEditingOrg(null)
-          setFormData({ name: "", description: "" })
+          setFormData({ name: "", domain: "" })
         }}
         title={editingOrg ? "Edit Organization" : "Create Organization"}
       >
@@ -194,13 +194,13 @@ export default function OrganizationsPage() {
             />
           </div>
           <div>
-            <label htmlFor="description" className="block text-sm font-medium mb-2">
-              Description
+            <label htmlFor="domain" className="block text-sm font-medium mb-2">
+              domain
             </label>
             <Input
-              id="description"
-              value={formData.description}
-              onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+              id="domain"
+              value={formData.domain}
+              onChange={(e) => setFormData({ ...formData, domain: e.target.value })}
             />
           </div>
           <div className="flex justify-end space-x-2">
@@ -210,7 +210,7 @@ export default function OrganizationsPage() {
               onClick={() => {
                 setIsCreateModalOpen(false)
                 setEditingOrg(null)
-                setFormData({ name: "", description: "" })
+                setFormData({ name: "", domain: "" })
               }}
             >
               Cancel

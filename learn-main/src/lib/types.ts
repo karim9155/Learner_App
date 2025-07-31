@@ -9,12 +9,13 @@ export interface User {
 }
 
 export interface Organization {
-  id: string
-  name: string
-  description?: string
-  createdAt: string
-  updatedAt: string
+  id: string; // UUID is represented as a string in TypeScript/JSON
+  name: string;
+  domain: string;
+  settings: null;
+  createdAt: string; // Instant is serialized to an ISO 8601 string
 }
+
 
 export enum Role {
   ADMIN = "ADMIN",

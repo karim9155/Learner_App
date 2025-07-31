@@ -1,7 +1,8 @@
 "use client"
 
 import { useQuery } from "@tanstack/react-query"
-import { progressApi, enrollmentsApi } from "@/lib/api"
+import { progressApi } from "@/lib/api/progress"
+import { enrollmentsApi } from "@/lib/api/enrollments"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card"
 import { formatDuration } from "@/lib/utils"
 import { Play, CheckCircle, Clock } from "lucide-react"

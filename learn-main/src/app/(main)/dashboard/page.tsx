@@ -1,7 +1,7 @@
 "use client"
 
 import { useQuery } from "@tanstack/react-query"
-import { dashboardApi } from "@/lib/api"
+import { dashboardApi } from "@/lib/api/dashboard"
 import { MetricTile } from "@/components/ui/MetricTile"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/Table"

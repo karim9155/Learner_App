@@ -4,7 +4,7 @@ import type React from "react"
 
 import { useState } from "react"
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
-import { coursesApi } from "@/lib/api"
+import { coursesApi } from "@/lib/api/courses"
 import { Button } from "@/components/ui/Button"
 import { Input } from "@/components/ui/Input"
 import { Card, CardContent, CardHeader } from "@/components/ui/Card"
@@ -37,7 +37,6 @@ export default function CoursesPage() {
     title: "",
     description: "",
     organizationId: "",
-    instructorId: "",
   })
 
   const queryClient = useQueryClient()
@@ -52,7 +51,7 @@ export default function CoursesPage() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["courses"] })
       setIsCreateModalOpen(false)
-      setFormData({ title: "", description: "", organizationId: "", instructorId: "" })
+      setFormData({ title: "", description: "", organizationId: "" })
     },
   })
 
@@ -185,7 +184,7 @@ export default function CoursesPage() {
         isOpen={isCreateModalOpen}
         onClose={() => {
           setIsCreateModalOpen(false)
-          setFormData({ title: "", description: "", organizationId: "", instructorId: "" })
+          setFormData({ title: "", description: "", organizationId: "" })
         }}
         title="Create Course"
         size="lg"
@@ -215,7 +214,7 @@ export default function CoursesPage() {
               required
             />
           </div>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 gap-4">
             <div>
               <label htmlFor="organizationId" className="block text-sm font-medium mb-2">
                 Organization
@@ -228,18 +227,6 @@ export default function CoursesPage() {
                 required
               />
             </div>
-            <div>
-              <label htmlFor="instructorId" className="block text-sm font-medium mb-2">
-                Instructor
-              </label>
-              <Input
-                id="instructorId"
-                value={formData.instructorId}
-                onChange={(e) => setFormData({ ...formData, instructorId: e.target.value })}
-                placeholder="Instructor ID"
-                required
-              />
-            </div>
           </div>
           <div className="flex justify-end space-x-2">
             <Button
@@ -247,7 +234,7 @@ export default function CoursesPage() {
               variant="outline"
               onClick={() => {
                 setIsCreateModalOpen(false)
-                setFormData({ title: "", description: "", organizationId: "", instructorId: "" })
+                setFormData({ title: "", description: "", organizationId: "" })
               }}
             >
               Cancel
